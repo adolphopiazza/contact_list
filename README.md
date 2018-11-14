@@ -2,8 +2,7 @@
 
 With C++ using Struct
 
-## To Dos
+## To Do's
 
-* Configure delete item
 * Save to an external file
 * Maybe make it graphical?

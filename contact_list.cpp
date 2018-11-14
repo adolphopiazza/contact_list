@@ -18,34 +18,29 @@ struct Contact {
 };
 
 Contact addContact();
-void deleteContact(vector <Contact> &contacts, int indexToDelete);
-void showContacts(vector <Contact> contacts);
+void deleteContact(vector <Contact> &contacts);
+void showContacts(vector <Contact> contacts, bool itemRemoval = false);
+void clearBuffer();
 
 int main() {
     vector <Contact> contacts;
-    bool running = true;
     int add;
 
-    while (running) {
+    do {
         cout << "(1) to add more contacts, (2) to delete a contact, (3) to show all contacts, (0) to exit program -> ";
         cin >> add;
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        clearBuffer();
 
         if (add == 1) {
             contacts.push_back(addContact());
         } else if (add == 2) {
-            deleteContact(contacts, 0); //to finish
+            deleteContact(contacts);
         } else if (add == 3) {
             showContacts(contacts);
-        } else {
-            running = false;
         }
 
         system(CLEAR);
-    }
-
-    cout << "Number of contacts: " << contacts.size() << endl;
+    } while (add != 0);
 
     return 0;
 }
@@ -53,23 +48,44 @@ int main() {
 Contact addContact() {
     Contact c1;
 
-    cout << "First name: ";
+    system(CLEAR);
+    cout << "========Add Contact========" << endl;
+    cout << "\n\tFirst name: ";
     getline(cin, c1.firstName);
-    cout << "Last name: ";
+    cout << "\tLast name: ";
     getline(cin, c1.lastName);
-    cout << "Mobile Phone: ";
+    cout << "\tMobile Phone: ";
     getline(cin, c1.mobilePhone);
-    cout << "Your email: ";
+    cout << "\tYour email: ";
     getline(cin, c1.email);
 
     return c1;
 }
 
-void deleteContact(vector <Contact> &contacts, int indexToDelete) {
-    contacts.erase(contacts.begin() + indexToDelete);
+void deleteContact(vector <Contact> &contacts) {
+    int index;
+
+    showContacts(contacts, true);
+    if (contacts.size() < 1) {
+        cout << "\nNothing to delete." << endl;
+    } else {
+        cout << "\nWhat are the index that you want to remove? -> ";
+        cin >> index;
+        clearBuffer();
+
+        if (index > (contacts.size() - 1) || index < 0) {
+            cout << "\t-> Invalid index." << endl;
+        } else {
+            contacts.erase(contacts.begin() + index);
+            cout << "Index " << index << " was removed." << endl;
+        }
+    }
+
+    cout << "Press enter to go back...";
+    getchar();
 }
 
-void showContacts(vector <Contact> contacts) {
+void showContacts(vector <Contact> contacts, bool itemRemoval) {
     system(CLEAR);
 
     if (contacts.size() < 1) {
@@ -86,6 +102,13 @@ void showContacts(vector <Contact> contacts) {
         }
     }
 
-    cout << "Press enter to go back ...";
-    getchar();
+    if (!itemRemoval) {
+        cout << "Press enter to go back ...";
+        getchar();
+    }
+}
+
+void clearBuffer() {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
