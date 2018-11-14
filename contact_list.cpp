@@ -1,3 +1,8 @@
+#ifdef _WIN32
+#define CLEAR "cls"
+#else
+#define CLEAR "clear"
+#endif
 #include <iostream>
 #include <vector>
 #include <limits>
@@ -37,7 +42,7 @@ int main() {
             running = false;
         }
 
-        system("cls");
+        system(CLEAR);
     }
 
     cout << "Number of contacts: " << contacts.size() << endl;
@@ -65,7 +70,7 @@ void deleteContact(vector <Contact> &contacts, int indexToDelete) {
 }
 
 void showContacts(vector <Contact> contacts) {
-    system("cls");
+    system(CLEAR);
 
     if (contacts.size() < 1) {
         cout << "\tThere is no contacts to show." << endl;
