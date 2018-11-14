@@ -8,6 +8,7 @@
 #include <limits>
 #include <stdlib.h>
 #include <cstdio>
+#include <fstream>
 using namespace std;
 
 struct Contact {
@@ -20,14 +21,22 @@ struct Contact {
 Contact addContact();
 void deleteContact(vector <Contact> &contacts);
 void showContacts(vector <Contact> contacts, bool itemRemoval = false);
+void openFile(vector <Contact> &contacts);
+void save(vector <Contact> contacts);
 void clearBuffer();
+vector <string> split(string data, string delimiter);
 
 int main() {
     vector <Contact> contacts;
     int add;
 
     do {
-        cout << "(1) to add more contacts, (2) to delete a contact, (3) to show all contacts, (0) to exit program -> ";
+        cout << "(1) to add more contacts" << endl;
+        cout << "(2) to delete a contact" << endl;
+        cout << "(3) to show all contacts" << endl;
+        cout << "(8) to load data from a file" << endl;
+        cout << "(9) to save data to a file" << endl;
+        cout << "(0) to exit program -> ";
         cin >> add;
         clearBuffer();
 
@@ -37,6 +46,10 @@ int main() {
             deleteContact(contacts);
         } else if (add == 3) {
             showContacts(contacts);
+        } else if (add == 8) {
+            openFile(contacts);
+        } else if (add == 9) {
+            save(contacts);
         }
 
         system(CLEAR);
@@ -108,7 +121,89 @@ void showContacts(vector <Contact> contacts, bool itemRemoval) {
     }
 }
 
+void openFile(vector <Contact> &contacts) {
+    system(CLEAR);
+    string nameOfFile;
+    ifstream file;
+    vector <string> tmp;
+    string lineTmp;
+
+    cout << "========OPEN FILE========" << endl;
+    cout << "\n\tEnter the name of the file that you want to open: ";
+    getline(cin, nameOfFile);
+
+    file.open(nameOfFile + ".bido", ios::binary);
+    if (file.is_open()) {
+        while (getline(file, lineTmp)) {
+            tmp = split(lineTmp, ",");
+
+            Contact c1;
+            c1.firstName = tmp[0];
+            c1.lastName = tmp[1];
+            c1.mobilePhone = tmp[2];
+            c1.email = tmp[3];
+
+            contacts.push_back(c1);
+        }
+
+        cout << "\tFile opened with success!" << endl;
+    } else {
+        cout << "\tFile do not exist in the current folder." << endl;
+    }
+
+    cout << "Press enter to go back...";
+    getchar();
+}
+
+void save(vector <Contact> contacts) {
+    system(CLEAR);
+    string nameOfFile;
+    ofstream file;
+
+    if (contacts.size() < 1) {
+        cout << "\tNothing to save." << endl;
+    } else {
+        cout << "========SAVE========" << endl;
+        cout << "\n\tEnter the name of the file you want to save: ";
+        getline(cin, nameOfFile);
+
+        file.open(nameOfFile + ".bido", ios::binary);
+
+        cout << "\tSaving..." << endl;
+        for (unsigned int i = 0; i < contacts.size(); i++) {
+            file << contacts[i].firstName << "," << contacts[i].lastName;
+            file << "," << contacts[i].mobilePhone << "," << contacts[i].email << "\n";
+        }
+
+        file.close();
+        cout << "\n\tAll contents are saved to " << nameOfFile << endl;
+    }
+
+    cout << "Press enter to go back...";
+    getchar();
+}
+
 void clearBuffer() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+vector <string> split(string data, string delimiter) {
+    int delimiterIndex;
+    vector <string> splitted;
+
+    while (true) {
+        delimiterIndex = data.find(delimiter);
+
+        if (delimiterIndex == -1) {
+            delimiterIndex = data.find("\n");
+            splitted.push_back(data.substr(0, delimiterIndex));
+            break;
+        }
+
+        splitted.push_back(data.substr(0, delimiterIndex));
+        data.erase(0, delimiterIndex + 1);
+    }
+
+    return splitted;
 }

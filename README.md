@@ -2,7 +2,13 @@
 
 With C++ using Struct
 
-## To Do's
+## You Can
 
-* Save to an external file
+* Add more contacts
+* Delete contacts
+* Open a file with contacts
+* Save the contacts file
+
+### To Do
+
 * Maybe make it graphical?
