@@ -21,6 +21,7 @@ struct Contact {
 Contact addContact();
 void deleteContact(vector <Contact> &contacts);
 void showContacts(vector <Contact> contacts, bool itemRemoval = false);
+void clearMemory(vector <Contact> &contacts);
 void openFile(vector <Contact> &contacts);
 void save(vector <Contact> contacts);
 void clearBuffer();
@@ -34,6 +35,7 @@ int main() {
         cout << "(1) to add more contacts" << endl;
         cout << "(2) to delete a contact" << endl;
         cout << "(3) to show all contacts" << endl;
+        cout << "(7) to clear all contacts from memory" << endl;
         cout << "(8) to load data from a file" << endl;
         cout << "(9) to save data to a file" << endl;
         cout << "(0) to exit program -> ";
@@ -46,6 +48,8 @@ int main() {
             deleteContact(contacts);
         } else if (add == 3) {
             showContacts(contacts);
+        } else if (add == 7) {
+            clearMemory(contacts);
         } else if (add == 8) {
             openFile(contacts);
         } else if (add == 9) {
@@ -119,6 +123,32 @@ void showContacts(vector <Contact> contacts, bool itemRemoval) {
         cout << "Press enter to go back ...";
         getchar();
     }
+}
+
+void clearMemory(vector <Contact> &contacts) {
+    system(CLEAR);
+    bool choice;
+
+    cout << "\tDo you want to clear all the contacts from memory?" << endl;
+    cout << "(0) no, (1) yes -> ";
+    cin >> choice;
+    clearBuffer();
+
+    if (choice == true) {
+        if (contacts.size() < 1) {
+            cout << "Nothing to clear." << endl;
+        } else {
+            contacts.clear();
+            cout << "Contents cleared" << endl;
+        }
+    } else if (choice == false) {
+        cout << "Will not clear" << endl;
+    } else {
+        cout << "Invalid choice." << endl;
+    }
+
+    cout << "Press enter to go back ...";
+    getchar();
 }
 
 void openFile(vector <Contact> &contacts) {
